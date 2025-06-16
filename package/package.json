@@ -1,5 +1,5 @@
 {
-  "name": "@vimn/bighorn",
+  "name": "bighorn",
   "version": "0.0.1-a",
   "description": "Lightweight and robust wrapper for using and interacting with the Discord API for Bun.",
   "type": "module",
