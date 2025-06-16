@@ -1,0 +1,44 @@
+{
+  "name": "@vimn/bighorn",
+  "version": "0.0.1-a",
+  "description": "Lightweight and robust wrapper for using and interacting with the Discord API for Bun.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "bun src/test/index.ts"
+  },
+  "keywords": [
+    "discord",
+    "websocket",
+    "rest",
+    "api",
+    "wrapper",
+    "bun"
+  ],
+  "author": "KingBCats (Johan)",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "discord-api-types": "^0.38.11"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.16",
+    "discord.js": "^14.20.0",
+    "eris": "^0.18.0",
+    "mitata": "^1.0.34",
+    "oceanic.js": "^1.12.0",
+    "unbuild": "^3.5.0"
+  }
+}

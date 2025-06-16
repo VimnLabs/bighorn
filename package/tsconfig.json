@@ -1,0 +1,25 @@
+{
+  "extends": [
+    "../tsconfig.json"
+  ],
+  "compilerOptions": {
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "@src/*" : [
+        "./src/*"
+      ],
+      "@dist/*" : [
+        "./dist/*"
+      ],
+      "@test/*" : [
+        "./test/*"
+      ],
+      "@entity":  [
+        "./src/classes/entity.ts"
+      ]
+    }
+  }
+}
