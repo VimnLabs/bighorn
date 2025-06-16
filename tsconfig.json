@@ -1,0 +1,38 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "outDir": "dist",
+        "strict": true,
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "experimentalDecorators": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "noFallthroughCasesInSwitch": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "forceConsistentCasingInFileNames": true,
+        "removeComments": false,
+        "typeRoots": [
+            "./node_modules/@types"
+        ],
+        "sourceMap": true,
+        "baseUrl": "./",
+        "noImplicitAny": true,
+        "emitDeclarationOnly": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "declaration": true,
+        "emitDecoratorMetadata": true,
+        "preserveConstEnums": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        "noErrorTruncation": true,
+        "stripInternal": true
+    },
+    "exclude": ["./*/node_modules", "./*/build.config.ts"]
+}
