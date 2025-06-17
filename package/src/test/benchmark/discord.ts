@@ -3,7 +3,7 @@ import { Routes }        from "discord-api-types/v10";
 import { Client }        from "discord.js";
 import process           from "node:process";
 
-export async function main() {
+export async function main(requests = 10) {
   const client = new Client( {
     intents : 0
   } )
@@ -11,7 +11,7 @@ export async function main() {
   client.on( "ready", async () => {
     const promises = []
     
-    for ( let i = 0 ; i < 10 ; i++ ) {
+    for ( let i = 0 ; i < requests ; i++ ) {
       promises.push(
         client.rest.request( {
           method : RequestMethod.Get,
@@ -20,7 +20,7 @@ export async function main() {
       );
     }
     
-    for ( let i = 0 ; i < 10 ; i++ ) {
+    for ( let i = 0 ; i < requests ; i++ ) {
       promises.push(
         client.rest.request( {
           method : RequestMethod.Get,
