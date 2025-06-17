@@ -1,8 +1,8 @@
-import { Entity }                   from "@entity";
-import { Message }                  from "@src/classes/entities/message";
-import { format_simple_entity }     from "@src/constants";
-import { Attachment, Method, Rest } from "@src/core/rest";
-import { log }                      from "@src/logger";
+import { Entity }                   from "../entity";
+import { Message }                  from "./message";
+import { format_simple_entity }     from "../../constants";
+import { Attachment, Method, Rest } from "../../core/rest";
+import { log }                      from "../../logger";
 import {
   APIChannel,
   APIMessage,

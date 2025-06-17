@@ -1,24 +1,24 @@
-import { Entity } from "@entity";
+import { Entity } from "../entity";
 import {
   Channel
-}                 from "@src/classes/entities/channel";
+}                 from "./channel";
 import {
   User
-}                 from "@src/classes/entities/user";
+}                 from "./user";
 import {
   fill_replacer,
   format_simple_entity,
   GENERIC_MESSAGES,
   KEYWORDS
-}                 from "@src/constants";
+}                 from "../../constants";
 import {
   Attachment,
   Method,
   Rest
-}                 from "@src/core/rest";
+}                 from "../../core/rest";
 import {
   log
-}                 from "@src/logger";
+}                 from "../../logger";
 import {
   APIChannel,
   APIMessage,

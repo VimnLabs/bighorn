@@ -1,6 +1,6 @@
-import { User }            from "@src/classes/entities/user";
-import { ENDPOINT }        from "@src/constants";
-import { Dictionary }      from "@src/dictionary";
+import { User }            from "../classes/entities/user";
+import { ENDPOINT }        from "../constants";
+import { Dictionary }      from "../dictionary";
 import { APIUser, Routes } from "discord-api-types/v10";
 
 /**

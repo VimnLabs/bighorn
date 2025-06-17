@@ -3,8 +3,8 @@ import {
   GATEWAY,
   KEYWORDS,
   SOCKET_MESSAGES
-}              from "@src/constants";
-import { log } from "@src/logger";
+}              from "../constants";
+import { log } from "../logger";
 import {
   type GatewayDispatchEvents,
   type GatewayDispatchPayload,

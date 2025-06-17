@@ -1,27 +1,27 @@
-import { Entity } from "@entity";
+import { Entity } from "../entity";
 import {
   Guild
-}                 from "@src/classes/entities/guild";
+}                 from "./guild";
 import {
   MemberAvatar,
   MemberBanner
-}                 from "@src/classes/entities/image";
+}                 from "./image";
 import {
   User
-}                 from "@src/classes/entities/user";
+}                 from "./user";
 import {
   ENTITY_MESSAGES,
   fill_replacer,
   format_entity_with_sub,
   KEYWORDS
-}                 from "@src/constants";
+}                 from "../../constants";
 import {
   Method,
   Rest
-}                 from "@src/core/rest";
+}                 from "../../core/rest";
 import {
   log
-}                 from "@src/logger";
+}                 from "../../logger";
 import {
   APIGuild,
   APIGuildMember,

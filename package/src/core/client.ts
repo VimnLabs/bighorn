@@ -1,7 +1,7 @@
-import { Application }                           from "@src/classes/entities/application";
-import { Method, Rest }                          from "@src/core/rest";
-import { EventHandler, Socket, SocketSettings }  from "@src/core/socket";
-import { log }                                   from "@src/logger";
+import { Application }                           from "../classes/entities/application";
+import { Method, Rest }                          from "../core/rest";
+import { EventHandler, Socket, SocketSettings }  from "../core/socket";
+import { log }                                   from "../logger";
 import { APIApplication, GatewayDispatchEvents } from "discord-api-types/v10";
 
 /**

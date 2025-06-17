@@ -1,36 +1,36 @@
-import { Entity } from "@entity";
+import { Entity } from "../entity";
 import {
   Channel
-}                 from "@src/classes/entities/channel";
+}                 from "./channel";
 import {
   Guild
-}                 from "@src/classes/entities/guild";
+}                 from "./guild";
 import {
   Member
-}                 from "@src/classes/entities/member";
+}                 from "./member";
 import {
   Message
-}                 from "@src/classes/entities/message";
+}                 from "./message";
 import {
   User
-}                 from "@src/classes/entities/user";
+}                 from "./user";
 import {
   ENTITY_MESSAGES,
   fill_replacer,
   format_simple_entity,
   KEYWORDS
-}                 from "@src/constants";
+}                 from "../../constants";
 import {
   Attachment,
   Method,
   Rest
-}                 from "@src/core/rest";
+}                 from "../../core/rest";
 import {
   Dictionary
-}                 from "@src/dictionary";
+}                 from "../../dictionary";
 import {
   log
-}                 from "@src/logger";
+}                 from "../../logger";
 import type {
   APIChannel
 }                 from "discord-api-types/payloads/v10/channel";

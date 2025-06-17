@@ -1,6 +1,6 @@
-import { GENERIC_MESSAGES } from "@src/constants";
-import { Rest }             from "@src/core/rest";
-import { log }              from "@src/logger";
+import { GENERIC_MESSAGES } from "../constants";
+import { Rest }             from "../core/rest";
+import { log }              from "../logger";
 
 /**
  * Base abstract class representing a generic entity returned from the API.

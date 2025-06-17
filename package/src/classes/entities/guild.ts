@@ -1,11 +1,11 @@
-import { Entity }                 from "@entity";
-import { Emoji }                  from "@src/classes/entities/emoji";
-import { GuildBanner, GuildIcon } from "@src/classes/entities/image";
-import { Role }                   from "@src/classes/entities/role";
-import { format_simple_entity }   from "@src/constants";
-import { Method, Rest }           from "@src/core/rest";
-import { Dictionary }             from "@src/dictionary";
-import { log }                    from "@src/logger";
+import { Entity }                 from "../entity";
+import { Emoji }                  from "./emoji";
+import { GuildBanner, GuildIcon } from "./image";
+import { Role }                   from "./role";
+import { format_simple_entity }   from "../../constants";
+import { Method, Rest }           from "../../core/rest";
+import { Dictionary }             from "../../dictionary";
+import { log }                    from "../../logger";
 import {
   APIBan,
   APIChannel,

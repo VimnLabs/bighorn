@@ -1,6 +1,6 @@
-import { Entity }       from "@entity";
-import { Guild }        from "@src/classes/entities/guild";
-import { Sizes }        from "@src/classes/entities/image";
+import { Entity }       from "../entity";
+import { Guild }        from "./guild";
+import { Sizes }        from "./image";
 import {
   CDN,
   fill_replacer,
@@ -8,9 +8,9 @@ import {
   format_simple_entity,
   GENERIC_MESSAGES,
   KEYWORDS
-}                       from "@src/constants";
-import { Method, Rest } from "@src/core/rest";
-import { log }          from "@src/logger";
+}                       from "../../constants";
+import { Method, Rest } from "../../core/rest";
+import { log }          from "../../logger";
 import {
   APIEmoji,
   APIGuild,

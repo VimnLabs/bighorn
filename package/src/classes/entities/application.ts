@@ -1,9 +1,9 @@
-import { Entity }               from "@entity";
-import { Emoji }                from "@src/classes/entities/emoji";
-import { format_simple_entity } from "@src/constants";
-import { Method, Rest }         from "@src/core/rest";
-import { Dictionary }           from "@src/dictionary";
-import { log }                  from "@src/logger";
+import { Entity }               from "../entity";
+import { Emoji }                from "./emoji";
+import { format_simple_entity } from "../../constants";
+import { Method, Rest }         from "../../core/rest";
+import { Dictionary }           from "../../dictionary";
+import { log }                  from "../../logger";
 import {
   APIApplication,
   APIEmoji,

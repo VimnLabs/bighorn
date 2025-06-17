@@ -1,5 +1,5 @@
-import { CDN, format_simple_entity } from "@src/constants";
-import { Rest }                      from "@src/core/rest";
+import { CDN, format_simple_entity } from "../../constants";
+import { Rest }                      from "../../core/rest";
 import {
   CDNRoutes,
   DefaultUserAvatarAssets,
@@ -10,7 +10,7 @@ import {
   UserAvatarFormat,
   UserBannerFormat
 } from "discord-api-types/v10";
-import { Entity } from "@entity";
+import { Entity } from "../entity";
 
 /**
  * A union type representing valid image sizes supported by the Discord CDN.

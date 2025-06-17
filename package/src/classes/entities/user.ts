@@ -1,14 +1,14 @@
-import { Entity }                 from "@entity";
-import { UserAvatar, UserBanner } from "@src/classes/entities/image";
+import { Entity }                 from "../entity";
+import { UserAvatar, UserBanner } from "./image";
 import {
   ENTITY_MESSAGES,
   EPOCH,
   fill_replacer,
   format_simple_entity,
   KEYWORDS
-}                                 from "@src/constants";
-import { Method, Rest }           from "@src/core/rest";
-import { log }                    from "@src/logger";
+}                                 from "../../constants";
+import { Method, Rest }           from "../../core/rest";
+import { log }                    from "../../logger";
 import { APIUser }                from "discord-api-types/v10";
 
 /**

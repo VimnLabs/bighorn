@@ -1,9 +1,9 @@
-import { Entity } from "@entity";
-import { Guild } from "@src/classes/entities/guild";
-import { RoleIcon } from "@src/classes/entities/image";
-import { format_entity_with_sub } from "@src/constants";
-import { Method, Rest } from "@src/core/rest";
-import { log } from "@src/logger";
+import { Entity } from "../entity";
+import { Guild } from "./guild";
+import { RoleIcon } from "./image";
+import { format_entity_with_sub } from "../../constants";
+import { Method, Rest } from "../../core/rest";
+import { log } from "../../logger";
 import {
   APIGuild,
   APIRole,
