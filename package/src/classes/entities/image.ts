@@ -128,7 +128,7 @@ export class UserAvatar<Raw extends RawImage = RawImage> extends HashImage<Raw> 
     size?: Sizes;
   }): string | null {
     return this.raw.hash
-      ? `${ CDN }${ CDNRoutes.userAvatar( this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP ) }`
+      ? `${ CDN }${ CDNRoutes.userAvatar( this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP ) }${ settings?.size ? `?size=${ settings?.size }` : "" }`
       : null;
   }
   
