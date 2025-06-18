@@ -1,34 +1,36 @@
-import { Entity } from "../entity";
-import {
-  Guild
-}                 from "./guild";
-import {
-  MemberAvatar,
-  MemberBanner
-}                 from "./image";
-import {
-  User
-}                 from "./user";
-import {
-  ENTITY_MESSAGES,
-  fill_replacer,
-  format_entity_with_sub,
-  KEYWORDS
-}                 from "../../constants";
-import {
-  Method,
-  Rest
-}                 from "../../core/rest";
-import {
-  log
-}                 from "../../logger";
 import {
   APIGuild,
   APIGuildMember,
   APIInteractionGuildMember,
   APIVoiceState,
   RESTPatchAPIGuildMemberJSONBody
-}                 from "discord-api-types/v10";
+} from "discord-api-types/v10";
+import {
+  ENTITY_MESSAGES,
+  format_entity_with_sub,
+  KEYWORDS,
+  replace
+} from "../../constants";
+import {
+  Method,
+  Rest
+} from "../../core/rest";
+import {
+  log
+} from "../../logger";
+import {
+  Entity
+} from "../entity";
+import {
+  Guild
+} from "./guild";
+import {
+  MemberAvatar,
+  MemberBanner
+} from "./image";
+import {
+  User
+} from "./user";
 
 /**
  * Represents a union type for any guild member payload received from Discord.
@@ -102,9 +104,9 @@ export class Member<Raw extends RawMember = RawMember> extends Entity<Raw> {
    */
   public banner(): MemberBanner {
     if ( this.raw.banner === null )
-      log.warn( this.name, ENTITY_MESSAGES.NO_HASH.replace( ...fill_replacer( {
+      log.warn( this.name, replace( ENTITY_MESSAGES.NO_HASH, {
         [KEYWORDS.Kind] : "custom banner"
-      } ) ) );
+      } ) );
     
     return new MemberBanner( this.rest, {
       hash : this.raw.banner ?? null,
@@ -122,9 +124,9 @@ export class Member<Raw extends RawMember = RawMember> extends Entity<Raw> {
    */
   public avatar(): MemberAvatar {
     if ( this.raw.avatar === null )
-      log.warn( this.name, ENTITY_MESSAGES.NO_HASH.replace( ...fill_replacer( {
+      log.warn( this.name, replace( ENTITY_MESSAGES.NO_HASH, {
         [KEYWORDS.Kind] : "custom avatar"
-      } ) ) );
+      } ) );
     
     return new MemberAvatar( this.rest, {
       hash : this.raw.avatar ?? null,

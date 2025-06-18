@@ -1,11 +1,4 @@
 import {
-  fill_replacer,
-  GATEWAY,
-  KEYWORDS,
-  SOCKET_MESSAGES
-}              from "../constants";
-import { log } from "../logger";
-import {
   type GatewayDispatchEvents,
   type GatewayDispatchPayload,
   GatewayIntentBits,
@@ -13,7 +6,9 @@ import {
   GatewayPresenceUpdateData,
   type GatewayReceivePayload,
   type GatewaySendPayload
-}              from "discord-api-types/v10";
+}                                                      from "discord-api-types/v10";
+import { GATEWAY, KEYWORDS, replace, SOCKET_MESSAGES } from "../constants";
+import { log }                                         from "../logger";
 
 const SOCKET_HEADER = "WebSocket";
 
@@ -120,9 +115,9 @@ export class Socket {
    */
   public listen<E extends GatewayDispatchEvents>(event: E, handler: EventHandler<E>) {
     if ( this.events.has( event ) ) {
-      if ( this.settings.warns ) log.warn( SOCKET_HEADER, SOCKET_MESSAGES.LISTENER_REPLACED.replace( ...fill_replacer( {
+      if ( this.settings.warns ) log.warn( SOCKET_HEADER, replace( SOCKET_MESSAGES.LISTENER_REPLACED, {
         [KEYWORDS.Event] : event
-      } ) ) );
+      } ) );
     }
     this.events.set( event, handler as unknown as EventHandler<GatewayDispatchEvents> );
   }
@@ -206,9 +201,9 @@ export class Socket {
       };
       
       this._ws!.onclose = ({ reason }) => {
-        if ( this.settings.warns ) log.warn( SOCKET_HEADER, SOCKET_MESSAGES.CLOSED.replace( ...fill_replacer( {
+        if ( this.settings.warns ) log.warn( SOCKET_HEADER, replace( SOCKET_MESSAGES.CLOSED, {
           [KEYWORDS.Reason] : reason
-        } ) ) )
+        } ) )
       };
       
       //@ts-expect-error
@@ -230,9 +225,9 @@ export class Socket {
     try {
       payload = JSON.parse( event.data.toString() );
     } catch ( err ) {
-      log.fail( SOCKET_HEADER, SOCKET_MESSAGES.JSON_INVALID.replace( ...fill_replacer( {
+      log.fail( SOCKET_HEADER, replace( SOCKET_MESSAGES.JSON_INVALID, {
         [KEYWORDS.Data] : String( event.data )
-      } ) ) );
+      } ) );
       return;
     }
     

@@ -1,15 +1,25 @@
-import { Entity }                 from "../entity";
-import { UserAvatar, UserBanner } from "./image";
+import { APIUser } from "discord-api-types/v10";
 import {
   ENTITY_MESSAGES,
   EPOCH,
-  fill_replacer,
   format_simple_entity,
-  KEYWORDS
-}                                 from "../../constants";
-import { Method, Rest }           from "../../core/rest";
-import { log }                    from "../../logger";
-import { APIUser }                from "discord-api-types/v10";
+  KEYWORDS,
+  replace
+}                  from "../../constants";
+import {
+  Method,
+  Rest
+}                  from "../../core/rest";
+import {
+  log
+}                  from "../../logger";
+import {
+  Entity
+}                  from "../entity";
+import {
+  UserAvatar,
+  UserBanner
+}                  from "./image";
 
 /**
  * Represents a Discord user entity.
@@ -86,9 +96,9 @@ export class User<Raw extends APIUser = APIUser> extends Entity<Raw> {
    */
   public avatar(): UserAvatar {
     if ( this.raw.avatar === null ) {
-      log.warn( this.name, ENTITY_MESSAGES.NO_HASH.replace( ...fill_replacer( {
+      log.warn( this.name, replace( ENTITY_MESSAGES.NO_HASH, {
         [KEYWORDS.Kind] : "avatar"
-      } ) ) );
+      } ) );
     }
     
     return new UserAvatar( this.rest, {
@@ -110,9 +120,9 @@ export class User<Raw extends APIUser = APIUser> extends Entity<Raw> {
    */
   public banner(): UserBanner {
     if ( this.raw.banner === null ) {
-      log.warn( this.name, ENTITY_MESSAGES.NO_HASH.replace( ...fill_replacer( {
+      log.warn( this.name, replace( ENTITY_MESSAGES.NO_HASH, {
         [KEYWORDS.Kind] : "banner"
-      } ) ) );
+      } ) );
     }
     
     return new UserBanner( this.rest, {

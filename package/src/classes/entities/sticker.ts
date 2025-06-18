@@ -1,21 +1,30 @@
-import { Entity }       from "../entity";
-import { Sizes }        from "./image";
-import {
-  CDN,
-  fill_replacer,
-  format_simple_entity,
-  GENERIC_MESSAGES,
-  KEYWORDS
-}                       from "../../constants";
-import { Method, Rest } from "../../core/rest";
-import { log }          from "../../logger";
 import {
   APISticker,
   CDNRoutes,
   ImageFormat,
   RESTPatchAPIGuildStickerJSONBody,
   StickerFormat
-}                       from "discord-api-types/v10";
+} from "discord-api-types/v10";
+import {
+  CDN,
+  format_simple_entity,
+  GENERIC_MESSAGES,
+  KEYWORDS,
+  replace
+} from "../../constants";
+import {
+  Method,
+  Rest
+} from "../../core/rest";
+import {
+  log
+} from "../../logger";
+import {
+  Entity
+} from "../entity";
+import {
+  Sizes
+} from "./image";
 
 /**
  * Represents a guild sticker object.
@@ -98,15 +107,12 @@ export class Sticker<Raw extends APISticker = APISticker> extends Entity<Raw> {
    * @returns A new `Sticker` instance containing the updated data.
    */
   public async edit(body: RESTPatchAPIGuildStickerJSONBody, reason?: string): Promise<Sticker> {
+    if ( !this.raw.guild_id ) throw log.fail( this.format_name( "edit" ), replace( GENERIC_MESSAGES.NOT_PART, {
+      [KEYWORDS.Id] : this.raw.id,
+      [KEYWORDS.Kind] : "sticker",
+      [KEYWORDS.Part] : "guild"
+    } ) ).error()
     try {
-      if ( !this.raw.guild_id ) {
-        throw new Error( GENERIC_MESSAGES.NOT_PART.replace( ...fill_replacer( {
-          [KEYWORDS.Id] : this.raw.id,
-          [KEYWORDS.Kind] : "sticker",
-          [KEYWORDS.Part] : "guild"
-        } ) ) );
-      }
-      
       const API = await this.rest.request<APISticker>( {
         method : Method.PATCH,
         route : "guildSticker",
@@ -130,15 +136,13 @@ export class Sticker<Raw extends APISticker = APISticker> extends Entity<Raw> {
    * @returns `true` if the sticker was successfully deleted; `false` otherwise.
    */
   public async destroy(reason?: string): Promise<boolean> {
+    if ( !this.raw.guild_id ) throw log.fail( this.format_name( "edit" ), replace( GENERIC_MESSAGES.NOT_PART, {
+      [KEYWORDS.Id] : this.raw.id,
+      [KEYWORDS.Kind] : "sticker",
+      [KEYWORDS.Part] : "guild"
+    } ) ).error()
+    
     try {
-      if ( !this.raw.guild_id ) {
-        throw new Error( GENERIC_MESSAGES.NOT_PART.replace( ...fill_replacer( {
-          [KEYWORDS.Id] : this.raw.id,
-          [KEYWORDS.Kind] : "sticker",
-          [KEYWORDS.Part] : "guild"
-        } ) ) );
-      }
-      
       await this.rest.request( {
         method : Method.DELETE,
         route : "guildSticker",

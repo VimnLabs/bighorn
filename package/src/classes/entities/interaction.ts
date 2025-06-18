@@ -1,39 +1,4 @@
-import { Entity } from "../entity";
-import {
-  Channel
-}                 from "./channel";
-import {
-  Guild
-}                 from "./guild";
-import {
-  Member
-}                 from "./member";
-import {
-  Message
-}                 from "./message";
-import {
-  User
-}                 from "./user";
-import {
-  ENTITY_MESSAGES,
-  fill_replacer,
-  format_simple_entity,
-  KEYWORDS
-}                 from "../../constants";
-import {
-  Attachment,
-  Method,
-  Rest
-}                 from "../../core/rest";
-import {
-  Dictionary
-}                 from "../../dictionary";
-import {
-  log
-}                 from "../../logger";
-import type {
-  APIChannel
-}                 from "discord-api-types/payloads/v10/channel";
+import type { APIChannel } from "discord-api-types/payloads/v10/channel";
 import {
   APIGuild,
   APIInteraction,
@@ -46,10 +11,45 @@ import {
   MessageType,
   RESTPostAPIInteractionCallbackJSONBody,
   RESTPostAPIInteractionCallbackWithResponseResult
-}                 from "discord-api-types/v10";
+}                          from "discord-api-types/v10";
 import {
   Snowflake
-}                 from "discord-api-types/v6";
+}                          from "discord-api-types/v6";
+import {
+  ENTITY_MESSAGES,
+  format_simple_entity,
+  KEYWORDS,
+  replace
+}                          from "../../constants";
+import {
+  Attachment,
+  Method,
+  Rest
+}                          from "../../core/rest";
+import {
+  Dictionary
+}                          from "../../dictionary";
+import {
+  log
+}                          from "../../logger";
+import {
+  Entity
+}                          from "../entity";
+import {
+  Channel
+}                          from "./channel";
+import {
+  Guild
+}                          from "./guild";
+import {
+  Member
+}                          from "./member";
+import {
+  Message
+}                          from "./message";
+import {
+  User
+}                          from "./user";
 
 /**
  * Represents a Discord interaction entity, such as slash commands,
@@ -272,9 +272,9 @@ export class Interaction<Type extends InteractionType = InteractionType, Raw ext
       
       // Follow-up
       --this._remaining_followup;
-      log.warn( this.format_name( "reply" ), ENTITY_MESSAGES.FOLLOW_UP_REMAINING.replace( ...fill_replacer( {
+      log.warn( this.format_name( "reply" ), replace( ENTITY_MESSAGES.FOLLOW_UP_REMAINING, {
         [KEYWORDS.Remaining] : this._remaining_followup
-      } ) ) );
+      } ) );
       
       const API = await this.rest.request<APIMessage>( {
         method : Method.POST,

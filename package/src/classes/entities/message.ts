@@ -1,24 +1,3 @@
-import { Entity } from "../entity";
-import {
-  Channel
-}                 from "./channel";
-import {
-  User
-}                 from "./user";
-import {
-  fill_replacer,
-  format_simple_entity,
-  GENERIC_MESSAGES,
-  KEYWORDS
-}                 from "../../constants";
-import {
-  Attachment,
-  Method,
-  Rest
-}                 from "../../core/rest";
-import {
-  log
-}                 from "../../logger";
 import {
   APIChannel,
   APIMessage,
@@ -29,10 +8,33 @@ import {
   MessageType,
   RESTPatchAPIChannelMessageJSONBody,
   RESTPostAPIChannelMessageJSONBody
-}                 from "discord-api-types/v10";
+} from "discord-api-types/v10";
 import {
   Snowflake
-}                 from "discord-api-types/v6";
+} from "discord-api-types/v6";
+import {
+  format_simple_entity,
+  GENERIC_MESSAGES,
+  KEYWORDS,
+  replace
+} from "../../constants";
+import {
+  Attachment,
+  Method,
+  Rest
+} from "../../core/rest";
+import {
+  log
+} from "../../logger";
+import {
+  Entity
+} from "../entity";
+import {
+  Channel
+} from "./channel";
+import {
+  User
+} from "./user";
 
 /**
  * Represents the raw message data returned from Discord,
@@ -146,12 +148,10 @@ export class Message<Type extends MessageType = MessageType, Raw extends RawMess
     if ( this.author.raw.id !== (await this.rest.me()).raw.id ) {
       log.warn(
         this.format_name( "edit" ),
-        GENERIC_MESSAGES.FROM_OTHERS.replace(
-          ...fill_replacer( {
-            [KEYWORDS.Action] : "edit messages",
-            [KEYWORDS.Kind] : "users"
-          } )
-        )
+        replace( GENERIC_MESSAGES.FROM_OTHERS, {
+          [KEYWORDS.Action] : "edit messages",
+          [KEYWORDS.Kind] : "users"
+        } )
       );
       return this;
     }
@@ -296,10 +296,10 @@ export class Message<Type extends MessageType = MessageType, Raw extends RawMess
    */
   public async endPoll(): Promise<Message<MessageType.PollResult> | undefined> {
     if ( this.author.raw.id !== (await this.rest.me()).raw.id ) {
-      log.warn( this.format_name( "edit" ), GENERIC_MESSAGES.FROM_OTHERS.replace( ...fill_replacer( {
+      log.warn( this.format_name( "edit" ), replace( GENERIC_MESSAGES.FROM_OTHERS, {
         [KEYWORDS.Action] : "end polls",
         [KEYWORDS.Kind] : "users"
-      } ) ) );
+      } ) );
       return undefined;
     }
     

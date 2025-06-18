@@ -50,18 +50,17 @@ export enum ENTITY_MESSAGES {
   FOLLOW_UP_REACHED = "You have reached the maximum number of follow up messages (5 messages)."
 }
 
-type FormatSimpleEntity<Target extends string,  Id extends Snowflake> = `${Target}:${Id}`
+type FormatSimpleEntity<Target extends string, Id extends Snowflake> = `${ Target }:${ Id }`
 
-export function format_simple_entity<Target extends string,  Id extends Snowflake>(target: Target, id: Id): FormatSimpleEntity<Target, Id> {
+export function format_simple_entity<Target extends string, Id extends Snowflake>(target: Target, id: Id): FormatSimpleEntity<Target, Id> {
   return `${ target }:${ id }`
 }
 
-export function format_entity_with_sub<Target extends string, Id extends Snowflake, Sub extends string>(target: Target, id: Id, sub: Sub): `${FormatSimpleEntity<Target, Id>}>${Sub}` {
-  return `${ format_simple_entity(target, id) }>${ sub }`
+export function format_entity_with_sub<Target extends string, Id extends Snowflake, Sub extends string>(target: Target, id: Id, sub: Sub): `${ FormatSimpleEntity<Target, Id> }>${ Sub }` {
+  return `${ format_simple_entity( target, id ) }>${ sub }`
 }
 
-export function fill_replacer(keywords: Partial<Record<KEYWORDS, string | number | boolean>>): [RegExp, ((_: unknown, key: KEYWORDS) => string)] {
-  return [/{(\w+)}/g, (_: unknown, key: KEYWORDS) =>
-    String(keywords[key] ?? `{${key}}`)
-  ]
+export function replace(string: string, keywords: Partial<Record<KEYWORDS, string | number | boolean>>): string {
+  return string.replaceAll( /{(\w+)}/g, (_: unknown, key: KEYWORDS) =>
+    String( keywords[key] ?? `{${ key }}` ) )
 }

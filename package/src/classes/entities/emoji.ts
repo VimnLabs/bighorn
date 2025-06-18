@@ -1,16 +1,3 @@
-import { Entity }       from "../entity";
-import { Guild }        from "./guild";
-import { Sizes }        from "./image";
-import {
-  CDN,
-  fill_replacer,
-  format_entity_with_sub,
-  format_simple_entity,
-  GENERIC_MESSAGES,
-  KEYWORDS
-}                       from "../../constants";
-import { Method, Rest } from "../../core/rest";
-import { log }          from "../../logger";
 import {
   APIEmoji,
   APIGuild,
@@ -19,6 +6,19 @@ import {
   ImageFormat,
   RESTPatchAPIGuildEmojiJSONBody
 }                       from "discord-api-types/v10";
+import {
+  CDN,
+  format_entity_with_sub,
+  format_simple_entity,
+  GENERIC_MESSAGES,
+  KEYWORDS,
+  replace
+}                       from "../../constants";
+import { Method, Rest } from "../../core/rest";
+import { log }          from "../../logger";
+import { Entity }       from "../entity";
+import { Guild }        from "./guild";
+import { Sizes }        from "./image";
 
 /**
  * Represents a custom emoji defined within a Discord guild.
@@ -110,13 +110,11 @@ export class Emoji<Raw extends APIEmoji = APIEmoji> extends Entity<Raw> {
     if ( !this.guild )
       throw log.fail(
         this.format_name( "fetch" ),
-        GENERIC_MESSAGES.NOT_PART.replace(
-          ...fill_replacer( {
-            [KEYWORDS.Id] : this.raw.id ?? "unknown",
-            [KEYWORDS.Kind] : "emoji",
-            [KEYWORDS.Part] : "guild. Manage it via the Application Class"
-          } )
-        )
+        replace( GENERIC_MESSAGES.NOT_PART, {
+          [KEYWORDS.Id] : this.raw.id ?? "unknown",
+          [KEYWORDS.Kind] : "emoji",
+          [KEYWORDS.Part] : "guild. Manage it via the Application Class"
+        } )
       ).error();
     
     try {
@@ -146,13 +144,11 @@ export class Emoji<Raw extends APIEmoji = APIEmoji> extends Entity<Raw> {
     if ( !this.guild )
       throw log.fail(
         this.format_name( "edit" ),
-        GENERIC_MESSAGES.NOT_PART.replace(
-          ...fill_replacer( {
-            [KEYWORDS.Id] : this.raw.id ?? "unknown",
-            [KEYWORDS.Kind] : "emoji",
-            [KEYWORDS.Part] : "guild. Manage it via the Application Class"
-          } )
-        )
+        replace( GENERIC_MESSAGES.NOT_PART, {
+          [KEYWORDS.Id] : this.raw.id ?? "unknown",
+          [KEYWORDS.Kind] : "emoji",
+          [KEYWORDS.Part] : "guild. Manage it via the Application Class"
+        } )
       ).error();
     
     try {
@@ -184,13 +180,11 @@ export class Emoji<Raw extends APIEmoji = APIEmoji> extends Entity<Raw> {
     if ( !this.guild )
       throw log.fail(
         this.format_name( "destroy" ),
-        GENERIC_MESSAGES.NOT_PART.replace(
-          ...fill_replacer( {
-            [KEYWORDS.Id] : this.raw.id ?? "unknown",
-            [KEYWORDS.Kind] : "emoji",
-            [KEYWORDS.Part] : "guild. Manage it via the Application Class"
-          } )
-        )
+        replace( GENERIC_MESSAGES.NOT_PART, {
+          [KEYWORDS.Id] : this.raw.id ?? "unknown",
+          [KEYWORDS.Kind] : "emoji",
+          [KEYWORDS.Part] : "guild. Manage it via the Application Class"
+        } )
       ).error();
     
     try {
