@@ -2,7 +2,7 @@ import { Snowflake } from "discord-api-types/v6";
 
 export const GATEWAY = "wss://gateway.discord.gg/?v=10&encoding=json" as const;
 export const ENDPOINT = "https://discord.com/api/v10" as const;
-export const CDN = "https://cdn.discordapp.com/" as const;
+export const CDN = "https://cdn.discordapp.com" as const;
 export const EPOCH = 1_420_070_400_000n as const
 
 export enum SOCKET_MESSAGES {
