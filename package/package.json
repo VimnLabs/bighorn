@@ -40,5 +40,12 @@
     "mitata": "^1.0.34",
     "oceanic.js": "^1.12.0",
     "unbuild": "^3.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VimnLabs/bighorn.git"
+  },
+  "bugs": {
+    "url": "https://github.com/VimnLabs/bighorn/issues"
   }
 }
