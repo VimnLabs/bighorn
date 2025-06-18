@@ -1,5 +1,3 @@
-import { CDN, format_simple_entity } from "../../constants";
-import { Rest }                      from "../../core/rest";
 import {
   CDNRoutes,
   DefaultUserAvatarAssets,
@@ -9,8 +7,10 @@ import {
   RoleIconFormat,
   UserAvatarFormat,
   UserBannerFormat
-} from "discord-api-types/v10";
-import { Entity } from "../entity";
+}                                    from "discord-api-types/v10";
+import { CDN, format_simple_entity } from "../../constants";
+import { Rest }                      from "../../core/rest";
+import { Entity }                    from "../entity";
 
 /**
  * A union type representing valid image sizes supported by the Discord CDN.
@@ -30,7 +30,8 @@ export interface RawImage {
 }
 
 /**
- * An extension of RawImage for guild-scoped images (such as member avatars or banners).
+ * An extension of RawImage for guild-scoped images (such as member avatars or
+ * banners).
  */
 export interface GuildRawImage extends RawImage {
   /** The guild ID associated with the image. */
@@ -38,8 +39,9 @@ export interface GuildRawImage extends RawImage {
 }
 
 /**
- * Abstract class that defines the structure and behavior for image representations
- * based on a hash. All concrete image types (user avatars, banners, etc.) extend this class.
+ * Abstract class that defines the structure and behavior for image
+ * representations based on a hash. All concrete image types (user avatars,
+ * banners, etc.) extend this class.
  *
  * @template Raw - A subtype of `RawImage` providing the required image data.
  */
@@ -53,7 +55,7 @@ export abstract class HashImage<Raw extends RawImage = RawImage> extends Entity<
    *   type during logging.
    */
   protected constructor(public readonly rest: Rest, public readonly raw: Raw, name: string) {
-    super(rest, raw, name);
+    super( rest, raw, name );
   }
   
   /**
@@ -90,16 +92,17 @@ export abstract class HashImage<Raw extends RawImage = RawImage> extends Entity<
     format?: ImageFormat;
     size?: Sizes;
   }): string {
-    return this.url(settings) ?? this.default(settings) ?? "";
+    return this.url( settings ) ?? this.default( settings ) ?? "";
   }
   
   /**
-   * Fetches and returns the image as an ArrayBuffer from the resolved display URL.
+   * Fetches and returns the image as an ArrayBuffer from the resolved display
+   * URL.
    *
    * @returns A promise that resolves to the binary content of the image.
    */
   public async buffer(): Promise<ArrayBuffer> {
-    const RESPONSE = await fetch(this.display());
+    const RESPONSE = await fetch( this.display() );
     return await RESPONSE.arrayBuffer();
   }
 }
@@ -117,7 +120,7 @@ export class UserAvatar<Raw extends RawImage = RawImage> extends HashImage<Raw> 
    * @param raw - User avatar data including hash and ownerId.
    */
   constructor(public readonly rest: Rest, public readonly raw: Raw) {
-    super(rest, raw, format_simple_entity(new.target.name, raw.ownerId));
+    super( rest, raw, format_simple_entity( new.target.name, raw.ownerId ) );
   }
   
   public override url(settings?: {
@@ -125,7 +128,7 @@ export class UserAvatar<Raw extends RawImage = RawImage> extends HashImage<Raw> 
     size?: Sizes;
   }): string | null {
     return this.raw.hash
-      ? `${CDN}${CDNRoutes.userAvatar(this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP)}`
+      ? `${ CDN }${ CDNRoutes.userAvatar( this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP ) }`
       : null;
   }
   
@@ -133,8 +136,8 @@ export class UserAvatar<Raw extends RawImage = RawImage> extends HashImage<Raw> 
     format?: ImageFormat;
     size?: Sizes;
   }): string {
-    const INDEX = Number((BigInt(this.raw.ownerId) >> 22n) % 6n) as DefaultUserAvatarAssets;
-    return `${CDN}${CDNRoutes.defaultUserAvatar(INDEX)}?size=${settings?.size ?? 512}` as const;
+    const INDEX = Number( (BigInt( this.raw.ownerId ) >> 22n) % 6n ) as DefaultUserAvatarAssets;
+    return `${ CDN }${ CDNRoutes.defaultUserAvatar( INDEX ) }?size=${ settings?.size ?? 512 }` as const;
   }
 }
 
@@ -151,7 +154,7 @@ export class UserBanner<Raw extends RawImage = RawImage> extends HashImage<Raw> 
    * @param raw - User banner data including hash and ownerId.
    */
   constructor(public readonly rest: Rest, public readonly raw: Raw) {
-    super(rest, raw, format_simple_entity(new.target.name, raw.ownerId));
+    super( rest, raw, format_simple_entity( new.target.name, raw.ownerId ) );
   }
   
   public override url(settings?: {
@@ -159,7 +162,7 @@ export class UserBanner<Raw extends RawImage = RawImage> extends HashImage<Raw> 
     size?: Sizes;
   }): string | null {
     return this.raw.hash
-      ? `${CDN}${CDNRoutes.userBanner(this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP)}`
+      ? `${ CDN }${ CDNRoutes.userBanner( this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP ) }${ settings?.size ? `?size=${ settings?.size }` : "" }`
       : null;
   }
   
@@ -181,7 +184,7 @@ export class GuildIcon<Raw extends RawImage = RawImage> extends HashImage<Raw> {
    * @param raw - Guild icon data including hash and ownerId.
    */
   constructor(public readonly rest: Rest, public readonly raw: Raw) {
-    super(rest, raw, format_simple_entity(new.target.name, raw.ownerId));
+    super( rest, raw, format_simple_entity( new.target.name, raw.ownerId ) );
   }
   
   public override url(settings?: {
@@ -189,7 +192,7 @@ export class GuildIcon<Raw extends RawImage = RawImage> extends HashImage<Raw> {
     size?: Sizes;
   }): string | null {
     return this.raw.hash
-      ? `${CDN}${CDNRoutes.guildIcon(this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP)}`
+      ? `${ CDN }${ CDNRoutes.guildIcon( this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP ) }${ settings?.size ? `?size=${ settings?.size }` : "" }`
       : null;
   }
   
@@ -211,7 +214,7 @@ export class GuildBanner<Raw extends RawImage = RawImage> extends HashImage<Raw>
    * @param raw - Guild banner data including hash and ownerId.
    */
   constructor(public readonly rest: Rest, public readonly raw: Raw) {
-    super(rest, raw, format_simple_entity(new.target.name, raw.ownerId));
+    super( rest, raw, format_simple_entity( new.target.name, raw.ownerId ) );
   }
   
   public override url(settings?: {
@@ -219,7 +222,7 @@ export class GuildBanner<Raw extends RawImage = RawImage> extends HashImage<Raw>
     size?: Sizes;
   }): string | null {
     return this.raw.hash
-      ? `${CDN}${CDNRoutes.guildBanner(this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP)}`
+      ? `${ CDN }${ CDNRoutes.guildBanner( this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP ) }${ settings?.size ? `?size=${ settings?.size }` : "" }`
       : null;
   }
   
@@ -241,7 +244,7 @@ export class RoleIcon<Raw extends RawImage = RawImage> extends HashImage<Raw> {
    * @param raw - Role icon data including hash and ownerId.
    */
   constructor(public readonly rest: Rest, public readonly raw: Raw) {
-    super(rest, raw, format_simple_entity(new.target.name, raw.ownerId));
+    super( rest, raw, format_simple_entity( new.target.name, raw.ownerId ) );
   }
   
   public override url(settings?: {
@@ -249,7 +252,7 @@ export class RoleIcon<Raw extends RawImage = RawImage> extends HashImage<Raw> {
     size?: Sizes;
   }): string | null {
     return this.raw.hash
-      ? `${CDN}${CDNRoutes.roleIcon(this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP)}`
+      ? `${ CDN }${ CDNRoutes.roleIcon( this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP ) }${ settings?.size ? `?size=${ settings?.size }` : "" }`
       : null;
   }
   
@@ -271,7 +274,7 @@ export class MemberAvatar<Raw extends GuildRawImage = GuildRawImage> extends Has
    * @param raw - Member avatar data including hash, ownerId and guildId.
    */
   constructor(public readonly rest: Rest, public readonly raw: Raw) {
-    super(rest, raw, format_simple_entity(new.target.name, raw.ownerId));
+    super( rest, raw, format_simple_entity( new.target.name, raw.ownerId ) );
   }
   
   public override url(settings?: {
@@ -279,7 +282,7 @@ export class MemberAvatar<Raw extends GuildRawImage = GuildRawImage> extends Has
     size?: Sizes;
   }): string | null {
     return this.raw.hash
-      ? `${CDN}${CDNRoutes.guildMemberAvatar(this.raw.guildId, this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP)}`
+      ? `${ CDN }${ CDNRoutes.guildMemberAvatar( this.raw.guildId, this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP ) }${ settings?.size ? `?size=${ settings?.size }` : "" }`
       : null;
   }
   
@@ -301,7 +304,7 @@ export class MemberBanner<Raw extends GuildRawImage = GuildRawImage> extends Has
    * @param raw - Member banner data including hash, ownerId and guildId.
    */
   constructor(public readonly rest: Rest, public readonly raw: Raw) {
-    super(rest, raw, format_simple_entity(new.target.name, raw.ownerId));
+    super( rest, raw, format_simple_entity( new.target.name, raw.ownerId ) );
   }
   
   public override url(settings?: {
@@ -309,7 +312,7 @@ export class MemberBanner<Raw extends GuildRawImage = GuildRawImage> extends Has
     size?: Sizes;
   }): string | null {
     return this.raw.hash
-      ? `${CDN}${CDNRoutes.guildMemberBanner(this.raw.guildId, this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP)}`
+      ? `${ CDN }${ CDNRoutes.guildMemberBanner( this.raw.guildId, this.raw.ownerId, this.raw.hash, settings?.format ?? ImageFormat.WebP ) }${ settings?.size ? `?size=${ settings?.size }` : "" }`
       : null;
   }
   
