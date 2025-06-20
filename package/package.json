@@ -43,7 +43,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/VimnLabs/bighorn.git"
+    "url": "git+https://github.com/VimnLabs/bighorn.git"
   },
   "bugs": {
     "url": "https://github.com/VimnLabs/bighorn/issues"
