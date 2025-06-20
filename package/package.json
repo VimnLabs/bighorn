@@ -15,7 +15,7 @@
     "dist"
   ],
   "scripts": {
-    "test": "bun src/test/index.ts"
+    "build": "unbuild"
   },
   "keywords": [
     "discord",
