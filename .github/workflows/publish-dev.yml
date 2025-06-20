@@ -32,7 +32,7 @@ jobs:
         id: versioning
         run: |
           DATE=$(date -u +"%Y%m%d%H%M")
-          BASE_VERSION=$(bun run eval "JSON.parse(require('fs').readFileSync('package.json')).version.split('-')[0]")
+          BASE_VERSION=$(bun -e "console.log(JSON.parse(require('fs').readFileSync('package.json')).version.split('-')[0])")
           echo "base=$BASE_VERSION" >> $GITHUB_OUTPUT
           echo "tagged=$BASE_VERSION-dev.$DATE" >> $GITHUB_OUTPUT
 
@@ -50,8 +50,8 @@ jobs:
       - name: Check if version exists on npm
         id: check
         run: |
-          NAME=$(bun run eval "JSON.parse(require('fs').readFileSync('package.json')).name")
-          VERSION=$(bun run eval "JSON.parse(require('fs').readFileSync('package.json')).version")
+          NAME=$(bun -e "console.log(JSON.parse(require('fs').readFileSync('package.json')).name)")
+          VERSION=$(bun -e "console.log(JSON.parse(require('fs').readFileSync('package.json')).version)")  
           EXISTS=$(npm view "$NAME@$VERSION" version || echo "null")
           echo "version_exists=$EXISTS" >> $GITHUB_OUTPUT
         env:
