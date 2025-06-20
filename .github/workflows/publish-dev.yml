@@ -1,0 +1,64 @@
+name: Publish Dev Version
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: package
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Setup Node.js for npm publish
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Extract version parts
+        id: versioning
+        run: |
+          DATE=$(date -u +"%Y%m%d%H%M")
+          BASE_VERSION=$(bun run eval "JSON.parse(require('fs').readFileSync('package.json')).version.split('-')[0]")
+          echo "base=$BASE_VERSION" >> $GITHUB_OUTPUT
+          echo "tagged=$BASE_VERSION-dev.$DATE" >> $GITHUB_OUTPUT
+
+      - name: Set new dev version in package.json
+        run: |
+          VERSION="${{ steps.versioning.outputs.tagged }}"
+          bun x json -I -f package.json -e "this.version='${VERSION}'"
+
+      - name: Install dependencies with Bun
+        run: bun install
+
+      - name: Build with unbuild
+        run: bun run build
+
+      - name: Check if version exists on npm
+        id: check
+        run: |
+          NAME=$(bun run eval "JSON.parse(require('fs').readFileSync('package.json')).name")
+          VERSION=$(bun run eval "JSON.parse(require('fs').readFileSync('package.json')).version")
+          EXISTS=$(npm view "$NAME@$VERSION" version || echo "null")
+          echo "version_exists=$EXISTS" >> $GITHUB_OUTPUT
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm with tag 'dev'
+        if: steps.check.outputs.version_exists == 'null'
+        run: npm publish --tag dev --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
