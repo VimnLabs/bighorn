@@ -223,6 +223,55 @@ export class Interaction<Type extends InteractionType = InteractionType, Raw ext
   }
   
   /**
+   * Defers the update of an interaction response to signal the client that a
+   * response is coming, particularly useful for component interactions such as
+   * button clicks.
+   *
+   * If the interaction has already been deferred, a warning is logged and the
+   * function returns `true`. This method sends a `DeferredMessageUpdate`
+   * response to the Discord API.
+   *
+   * @returns {Promise<boolean>} `true` if the defer was successful or already
+   *   deferred, otherwise `false`.
+   */
+  public async deferUpdate(): Promise<boolean> {
+    try {
+      if ( this._deferred ) {
+        log.warn( this.format_name( "defer" ), ENTITY_MESSAGES.ALREADY_DEFERRED );
+        return true;
+      }
+      
+      await this.rest.request<void, RESTPostAPIInteractionCallbackJSONBody>( {
+        method : Method.POST,
+        route : "interactionCallback",
+        args : [ this.raw.id, this.raw.token ],
+        body : {
+          type : InteractionResponseType.DeferredMessageUpdate
+        }
+      } );
+      
+      this._deferred = true;
+      return true;
+    } catch ( err ) {
+      log.warn( this.format_name( "deferUpdate" ), String( err ) );
+      return false;
+    }
+  }
+  
+  /**
+   * Marks the interaction as completed to prevent further edits or responses.
+   *
+   * This flag is typically used internally to track the state of an
+   * interaction lifecycle.
+   *
+   * @returns {boolean} Always returns `true` once the internal flag is set.
+   */
+  public markCompleted(): boolean {
+    this._completed = true;
+    return true;
+  }
+  
+  /**
    * Sends a reply or follow-up to the interaction. Handles
    * defer/edit/follow-up logic.
    *
