@@ -2,7 +2,6 @@ import type { APIChannel } from "discord-api-types/payloads/v10/channel";
 import {
   APIGuild,
   APIInteraction,
-  APIInteractionResponse,
   APIInteractionResponseCallbackData,
   APIMessage,
   InteractionResponseType,
@@ -347,9 +346,9 @@ export class Interaction<Type extends InteractionType = InteractionType, Raw ext
    * @param attachments - Optional attachments to include
    * @returns The edited Message instance
    */
-  public async edit(data: APIInteractionResponse, attachments?: Attachment[]) {
+  public async edit(data: APIInteractionResponseCallbackData, attachments?: Attachment[]) {
     if ( !this._completed ) {
-      return await this.reply( data as APIInteractionResponseCallbackData, attachments );
+      return await this.reply( data, attachments );
     }
     try {
       const API = await this.rest.request<APIMessage>( {
