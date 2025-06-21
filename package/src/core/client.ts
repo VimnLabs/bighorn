@@ -1,8 +1,10 @@
-import { Application }                           from "../classes/entities/application";
+import { APIApplication, GatewayDispatchEvents } from "discord-api-types/v10";
+import {
+  Application
+}                                                from "../classes/entities/application";
 import { Method, Rest }                          from "../core/rest";
 import { EventHandler, Socket, SocketSettings }  from "../core/socket";
 import { log }                                   from "../logger";
-import { APIApplication, GatewayDispatchEvents } from "discord-api-types/v10";
 
 /**
  * Configuration object used to initialize a {@link Client} instance.
@@ -37,7 +39,9 @@ export class Client {
       intents : settings.intents,
       token : `Bot ${ settings.token }`,
       maxRetries : settings.maxRetries,
-      sessionStore : settings.sessionStore
+      sessionStore : settings.sessionStore,
+      debug : settings.debug,
+      warns : settings.warns
     } );
     
     this._rest = new Rest( settings.token );
