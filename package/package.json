@@ -26,7 +26,7 @@
     "bun"
   ],
   "author": "KingBCats (Johan)",
-  "license": "ISC",
+  "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
