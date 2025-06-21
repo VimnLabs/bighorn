@@ -1,6 +1,6 @@
 {
   "name": "bighorn",
-  "version": "0.0.2",
+  "version": "0.0.2-a",
   "description": "Lightweight and robust wrapper for using and interacting with the Discord API for Bun.",
   "type": "module",
   "exports": {
