@@ -10,8 +10,6 @@ import {
 import { GATEWAY, KEYWORDS, replace, SOCKET_MESSAGES } from "../constants";
 import { log }                                         from "../logger";
 
-const SOCKET_HEADER = "WebSocket";
-
 /**
  * Configuration options for the Socket class.
  */
@@ -58,7 +56,7 @@ export class Socket {
   
   get ws(): WebSocket {
     if ( !this._ws ) {
-      throw log.fail( SOCKET_HEADER, SOCKET_MESSAGES.NO_SOCKET ).error();
+      throw log.fail( this.formatHeader(), SOCKET_MESSAGES.NO_SOCKET ).error();
     }
     return this._ws;
   }
@@ -88,7 +86,7 @@ export class Socket {
         } );
         
         if ( ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING ) {
-          if ( this.settings.debug ) log.echo( SOCKET_HEADER, SOCKET_MESSAGES.SOCKET_CLOSING );
+          if ( this.settings.debug ) log.echo( this.formatHeader(), SOCKET_MESSAGES.SOCKET_CLOSING );
           ws.close( 1000, SOCKET_MESSAGES.DESTROYED );
         }
         
@@ -99,12 +97,12 @@ export class Socket {
         this._ws = null;
         
         await closing;
-        if ( this.settings.debug ) log.echo( SOCKET_HEADER, SOCKET_MESSAGES.DESTROYED );
+        if ( this.settings.debug ) log.echo( this.formatHeader(), SOCKET_MESSAGES.DESTROYED );
       }
       
       return true;
     } catch ( err ) {
-      log.fail( SOCKET_HEADER, String( err ) );
+      log.fail( this.formatHeader(), String( err ) );
       return false;
     }
   }
@@ -115,7 +113,7 @@ export class Socket {
    */
   public listen<E extends GatewayDispatchEvents>(event: E, handler: EventHandler<E>) {
     if ( this.events.has( event ) ) {
-      if ( this.settings.warns ) log.warn( SOCKET_HEADER, replace( SOCKET_MESSAGES.LISTENER_REPLACED, {
+      if ( this.settings.warns ) log.warn( this.formatHeader(), replace( SOCKET_MESSAGES.LISTENER_REPLACED, {
         [KEYWORDS.Event] : event
       } ) );
     }
@@ -136,14 +134,14 @@ export class Socket {
       this._sessionId = null;
       this._lastSequence = null;
       this.settings.sessionStore?.clear();
-      if ( this.settings.debug ) log.echo( SOCKET_HEADER, SOCKET_MESSAGES.SESSION_CLEARED );
+      if ( this.settings.debug ) log.echo( this.formatHeader(), SOCKET_MESSAGES.SESSION_CLEARED );
     }
     
     const retries = this._retries++;
     const maxRetries = this.settings.maxRetries ?? 5;
     
     if ( retries >= maxRetries ) {
-      log.fail( SOCKET_HEADER, SOCKET_MESSAGES.MAX_RETRIES_EXCEEDED );
+      log.fail( this.formatHeader(), SOCKET_MESSAGES.MAX_RETRIES_EXCEEDED );
       this.settings.sessionStore?.clear();
       this._reconnecting = false;
       return false;
@@ -159,7 +157,7 @@ export class Socket {
           this._reconnecting = false;
           resolve( true );
         } catch ( e ) {
-          log.fail( SOCKET_HEADER, String( e ) );
+          log.fail( this.formatHeader(), String( e ) );
           this._reconnecting = false;
           reject( false );
         }
@@ -196,23 +194,27 @@ export class Socket {
     return new Promise( (resolve, reject) => {
       this._ws!.onopen = () => {
         this._lastACK = Date.now();
-        if ( this.settings.debug ) log.echo( SOCKET_HEADER, SOCKET_MESSAGES.CONNECTED );
+        if ( this.settings.debug ) log.echo( this.formatHeader(), SOCKET_MESSAGES.CONNECTED );
         resolve();
       };
       
       this._ws!.onclose = ({ reason }) => {
-        if ( this.settings.warns ) log.warn( SOCKET_HEADER, replace( SOCKET_MESSAGES.CLOSED, {
-          [KEYWORDS.Reason] : reason
-        } ) )
+        if ( this.settings.warns ) log.warn( this.formatHeader( "close" ), reason )
       };
       
       //@ts-expect-error
       this._ws!.onerror = (err: ErrorEvent) => {
-        reject( log.fail( SOCKET_HEADER, err.message ) );
+        reject( log.fail( this.formatHeader(), err.message ) );
       };
       
       this._ws!.onmessage = this._handleMessage.bind( this );
     } );
+  }
+  
+  private formatHeader(kind?: string) {
+    const SOCKET_HEADER = "WebSocket";
+    if ( !kind ) return SOCKET_HEADER;
+    return `${ SOCKET_HEADER }::${ kind }`
   }
   
   /**
@@ -225,9 +227,7 @@ export class Socket {
     try {
       payload = JSON.parse( event.data.toString() );
     } catch ( err ) {
-      log.fail( SOCKET_HEADER, replace( SOCKET_MESSAGES.JSON_INVALID, {
-        [KEYWORDS.Data] : String( event.data )
-      } ) );
+      log.fail( this.formatHeader( "invalid_json" ), event.data.toString() );
       return;
     }
     
@@ -255,7 +255,7 @@ export class Socket {
               d : this._lastSequence
             } )
           );
-          if ( this.settings.debug ) log.echo( SOCKET_HEADER, SOCKET_MESSAGES.PING_SENT );
+          if ( this.settings.debug ) log.echo( this.formatHeader(), SOCKET_MESSAGES.PING_SENT );
         }, d.heartbeat_interval );
         
         this._ws!.send(
@@ -276,18 +276,18 @@ export class Socket {
       
       case GatewayOpcodes.HeartbeatAck:
         this._lastACK = Date.now();
-        if ( this.settings.debug ) log.echo( SOCKET_HEADER, SOCKET_MESSAGES.ACK );
+        if ( this.settings.debug ) log.echo( this.formatHeader(), SOCKET_MESSAGES.ACK );
         break;
       
       case GatewayOpcodes.Reconnect:
-        if ( this.settings.debug ) log.echo( SOCKET_HEADER, SOCKET_MESSAGES.RECONNECT );
+        if ( this.settings.debug ) log.echo( this.formatHeader(), SOCKET_MESSAGES.RECONNECT );
         await this.reconnect();
         break;
       
       case GatewayOpcodes.InvalidSession:
-        if ( this.settings.warns ) log.warn( SOCKET_HEADER, SOCKET_MESSAGES.INVALID_SESSION );
+        if ( this.settings.warns ) log.warn( this.formatHeader(), SOCKET_MESSAGES.INVALID_SESSION );
         if ( d && this._sessionId && this._lastSequence !== null ) {
-          if ( this.settings.debug ) log.echo( SOCKET_HEADER, SOCKET_MESSAGES.RESUME );
+          if ( this.settings.debug ) log.echo( this.formatHeader(), SOCKET_MESSAGES.RESUME );
           this._ws!.send(
             JSON.stringify( {
               op : GatewayOpcodes.Resume,
@@ -299,7 +299,7 @@ export class Socket {
             } )
           );
         } else {
-          if ( this.settings.debug ) log.echo( SOCKET_HEADER, SOCKET_MESSAGES.RECONNECT );
+          if ( this.settings.debug ) log.echo( this.formatHeader(), SOCKET_MESSAGES.RECONNECT );
           await this.reconnect( true );
         }
         break;
@@ -318,7 +318,7 @@ export class Socket {
             try {
               handler( d );
             } catch ( err ) {
-              log.fail( SOCKET_HEADER, `Error in event handler ${ t }: ${ String( err ) }` );
+              log.fail( this.formatHeader( `event(${ t })` ), String( err ) );
             }
           }
         }
