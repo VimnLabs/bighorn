@@ -1,54 +1,56 @@
-import type { APIChannel } from "discord-api-types/payloads/v10/channel";
 import {
+  APIApplicationCommandAutocompleteResponse,
+  APIApplicationCommandOptionChoice,
+  APIChannel,
   APIGuild,
   APIInteraction,
   APIInteractionResponseCallbackData,
   APIMessage,
+  APIModalInteractionResponse,
+  APIModalInteractionResponseCallbackData,
   InteractionResponseType,
   InteractionType,
   MessageFlags,
   MessageType,
   RESTPostAPIInteractionCallbackJSONBody,
-  RESTPostAPIInteractionCallbackWithResponseResult
-}                          from "discord-api-types/v10";
-import {
+  RESTPostAPIInteractionCallbackWithResponseResult,
   Snowflake
-}                          from "discord-api-types/v6";
+} from "discord-api-types/v10";
 import {
   ENTITY_MESSAGES,
   format_simple_entity,
   KEYWORDS,
   replace
-}                          from "../../constants";
+} from "../../constants";
 import {
   Attachment,
   Method,
   Rest
-}                          from "../../core/rest";
+} from "../../core/rest";
 import {
   Dictionary
-}                          from "../../dictionary";
+} from "../../dictionary";
 import {
   log
-}                          from "../../logger";
+} from "../../logger";
 import {
   Entity
-}                          from "../entity";
+} from "../entity";
 import {
   Channel
-}                          from "./channel";
+} from "./channel";
 import {
   Guild
-}                          from "./guild";
+} from "./guild";
 import {
   Member
-}                          from "./member";
+} from "./member";
 import {
   Message
-}                          from "./message";
+} from "./message";
 import {
   User
-}                          from "./user";
+} from "./user";
 
 /**
  * Represents a Discord interaction entity, such as slash commands,
