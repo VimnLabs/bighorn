@@ -384,6 +384,94 @@ export class Interaction<Type extends InteractionType = InteractionType, Raw ext
     }
   }
   
+  /**
+   * Responds to an autocomplete interaction by sending a list of choices back
+   * to Discord. This method should only be used within the context of an
+   * application command interaction.
+   *
+   * @param choices - An array of choices to present in the autocomplete UI.
+   * @returns A promise resolving to `true` if the response was successfully
+   *   sent, otherwise `false`.
+   *
+   * @remarks
+   * If the interaction is not of type `ApplicationCommand`, the method logs a
+   *   warning and returns `false`. Any request error during the REST call is
+   *   also logged and causes the method to return `false`.
+   *
+   * @example
+   * ```ts
+   * ctx.autocomplete([
+   *   { name: "Option A", value: "a" },
+   *   { name: "Option B", value: "b" }
+   * ]);
+   * ```
+   */
+  public async autocomplete(choices: APIApplicationCommandOptionChoice[]): Promise<boolean> {
+    if ( !this.isApplicationCommand() ) {
+      log.warn( this.format_name( "autocomplete" ), ENTITY_MESSAGES.NO_AUTOCOMPLETE_INTERACTION );
+      return false;
+    }
+    
+    try {
+      await this.rest.request<void, APIApplicationCommandAutocompleteResponse>( {
+        method : Method.POST,
+        route : "interactionCallback",
+        args : [ this.raw.id, this.raw.token ],
+        body : {
+          type : InteractionResponseType.ApplicationCommandAutocompleteResult,
+          data : { choices }
+        }
+      } );
+      
+      return true;
+    } catch ( err ) {
+      log.warn( this.format_name( "autocomplete" ), String( err ) );
+      return false;
+    }
+  }
+  
+  /**
+   * Displays a modal dialog to the user in response to an interaction.
+   *
+   * @param modal - The modal data to be displayed, including title, components
+   *   and custom ID.
+   * @returns A promise resolving to `true` if the modal was successfully sent,
+   *   otherwise `false`.
+   *
+   * @remarks
+   * This method sends an interaction callback of type `Modal` to Discord. Any
+   *   errors during the REST call are logged and cause the method to return
+   *   `false`.
+   *
+   * @example
+   * ```ts
+   * ctx.showModal({
+   *   title: "Feedback",
+   *   custom_id: "feedback_modal",
+   *   components: [...]
+   * });
+   * ```
+   */
+  public async showModal(modal: APIModalInteractionResponseCallbackData): Promise<boolean> {
+    try {
+      await this.rest.request<void, APIModalInteractionResponse>( {
+        method : Method.POST,
+        route : "interactionCallback",
+        args : [ this.raw.id, this.raw.token ],
+        body : {
+          type : InteractionResponseType.Modal,
+          data : modal
+        }
+      } );
+      
+      return true;
+    } catch ( err ) {
+      log.warn( this.format_name( "showModal" ), String( err ) );
+      return false;
+    }
+  }
+  
+  
   /** Type guard for Ping interaction */
   public isPing(): this is Interaction<InteractionType.Ping> {
     return this.raw.type === InteractionType.Ping;
