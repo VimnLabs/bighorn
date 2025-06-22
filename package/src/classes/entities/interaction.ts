@@ -409,7 +409,7 @@ export class Interaction<Type extends InteractionType = InteractionType, Raw ext
    * ```
    */
   public async autocomplete(choices: APIApplicationCommandOptionChoice[]): Promise<boolean> {
-    if ( !this.isApplicationCommand() ) {
+    if ( !this.isApplicationCommandAutocomplete() ) {
       log.warn( this.format_name( "autocomplete" ), ENTITY_MESSAGES.NO_AUTOCOMPLETE_INTERACTION );
       return false;
     }
