@@ -47,7 +47,9 @@ export enum ENTITY_MESSAGES {
   ALREADY_DEFERRED = "This interaction has already been deferred",
   FOLLOW_UP_REMAINING = "You are sending a follow up message, you can only" +
     " send a maximum of 5 per interaction, you have {remaining} follow up messages left.",
-  FOLLOW_UP_REACHED = "You have reached the maximum number of follow up messages (5 messages)."
+  FOLLOW_UP_REACHED = "You have reached the maximum number of follow up" +
+    " messages (5 messages).",
+  NO_AUTOCOMPLETE_INTERACTION = "This has no effect since it is not an ApplicationCommandAutocomplete interaction."
 }
 
 type FormatSimpleEntity<Target extends string, Id extends Snowflake> = `${ Target }:${ Id }`
